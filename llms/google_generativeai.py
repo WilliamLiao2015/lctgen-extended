@@ -1,5 +1,5 @@
-from configs import prompts_dir
-from imports import genai
+from configs.paths import prompts_dir
+from imports.packages import genai
 
 
 def get_google_llm(model_name="gemini-1.0-pro-latest", generation_config=None, safety_settings=None):

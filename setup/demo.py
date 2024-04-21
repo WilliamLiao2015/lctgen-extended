@@ -1,5 +1,5 @@
-from imports import get_config, registry, load_all_map_vectors
-from configs import lctgen_dir
+from imports.lctgen import get_config, registry, load_all_map_vectors
+from configs.paths import lctgen_dir
 
 
 def setup_demo():

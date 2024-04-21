@@ -1,4 +1,5 @@
-from imports import sys, genai
+from imports.system import sys
+from imports.packages import genai, openai
 
 
 def setup_colab():
@@ -9,3 +10,5 @@ def setup_colab():
     # Google Colab
     from google.colab import userdata
     genai.configure(api_key=userdata.get("GOOGLE_API_KEY"))
+    openai.organization = userdata.get("OPENAI_ORGANIZATION")
+    openai.api_key = userdata.get("OPENAI_API_KEY")
