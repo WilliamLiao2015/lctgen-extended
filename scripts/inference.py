@@ -1,5 +1,6 @@
 from imports.packages import torch, np
-from imports.lctgen import output_formating_cot, map_retrival, get_map_data_batch, transform_traj_output_to_waymo_agent
+from imports.lctgen import output_formating_cot, map_retrival, transform_traj_output_to_waymo_agent
+from lctgen.inference.utils import get_map_data_batch
 
 
 def inference(model, cfg, map_vecs, map_ids, llm_result):
