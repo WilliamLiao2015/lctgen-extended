@@ -2,9 +2,10 @@ from imports.system import sys
 from imports.packages import genai, openai
 
 
-def setup_colab():
-    in_colab = "google.colab" in sys.modules
+in_colab = "google.colab" in sys.modules
 
+
+def setup_colab():
     if not in_colab: raise Exception("This function is only needed in Google Colab.")
 
     # Google Colab secrets
