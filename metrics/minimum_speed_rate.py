@@ -3,15 +3,15 @@ from imports.packages import plt, np
 from utils.geometry import compute_magnitude
 
 
-def visualize_minimum_speed(data, agents, t, label_y = 50):
+def visualize_minimum_speed_rate(data, agents, t, label_y = 50):
     ax = plt.gca()
 
-    ax.text(-60, label_y, f"Minimum speed rate: {evaluate_minimum_speed(data, agents, t):.2%}", fontsize=10, color="black")
+    ax.text(-60, label_y, f"Minimum speed rate: {evaluate_minimum_speed_rate(data, agents, t):.2%}", fontsize=10, color="black")
 
     return ax
 
 
-def evaluate_minimum_speed(data, agents, t, log=False):
+def evaluate_minimum_speed_rate(data, agents, t, log=False):
     """Minimum speed rate: {result:.2%}"""
 
     speeds = []

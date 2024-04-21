@@ -26,7 +26,7 @@ def get_sector(center, radius, start_angle, end_angle, steps=180):
     return Polygon(segment_vertices)
 
 
-def visualize_overlapped_area(data, agents, t = 0, label_y = 50):
+def visualize_overlapped_area_rate(data, agents, t = 0, label_y = 50):
     ax = plt.gca()
 
     for i, agent in enumerate(agents[t]):
@@ -44,12 +44,12 @@ def visualize_overlapped_area(data, agents, t = 0, label_y = 50):
             speed = compute_magnitude(dx, dy) * 10 # Maybe FPS?
         ax.add_artist(Wedge(position, speed, angle - vision / 2, angle + vision / 2, color="red", alpha=0.3))
 
-    ax.text(-60, label_y, f"Overlapped area rate: {evaluate_overlapped_area(data, agents, t):.2%}", fontsize=10, color="black")
+    ax.text(-60, label_y, f"Overlapped area rate: {evaluate_overlapped_area_rate(data, agents, t):.2%}", fontsize=10, color="black")
 
     return ax
 
 
-def evaluate_overlapped_area(data, agents, t, log=False):
+def evaluate_overlapped_area_rate(data, agents, t, log=False):
     """Overlapped area rate: {result:.2%}"""
 
     overlapped_area = 0

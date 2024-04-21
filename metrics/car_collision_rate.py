@@ -2,7 +2,7 @@ from imports.system import itertools
 from imports.packages import plt
 
 
-def visualize_car_collisions(data, agents, t, label_y = 50):
+def visualize_car_collision_rate(data, agents, t, label_y = 50):
     ax = plt.gca()
 
     for (i1, a1), (i2, a2) in itertools.combinations(enumerate(agents[t]), 2):
@@ -15,12 +15,12 @@ def visualize_car_collisions(data, agents, t, label_y = 50):
             ax.add_patch(plt.Circle(p1, 10, color="r", alpha=0.3))
             ax.add_patch(plt.Circle(p2, 10, color="r", alpha=0.3))
 
-    ax.text(-60, label_y, f"Car collision rate: {evaluate_car_collisions(data, agents, t):.2%}", fontsize=10, color="black")
+    ax.text(-60, label_y, f"Car collision rate: {evaluate_car_collision_rate(data, agents, t):.2%}", fontsize=10, color="black")
 
     return ax
 
 
-def evaluate_car_collisions(data, agents, t, log=False):
+def evaluate_car_collision_rate(data, agents, t, log=False):
     """Car collision rate: {result:.2%}"""
 
     collisions = 0

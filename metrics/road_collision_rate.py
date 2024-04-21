@@ -1,7 +1,7 @@
 from imports.packages import plt, LineString
 
 
-def visualize_road_collisions(data, agents, t = 0, label_y = 50):
+def visualize_road_collision_rate(data, agents, t = 0, label_y = 50):
     ax = plt.gca()
 
     for i, agent in enumerate(agents[t]):
@@ -15,12 +15,12 @@ def visualize_road_collisions(data, agents, t = 0, label_y = 50):
             if car.intersects(lane):
                 ax.plot((x1, x2), (y1, y2), c="red", linewidth=1)
 
-    ax.text(-60, label_y, f"Road collision rate: {evaluate_road_collisions(data, agents, t):.2%}", fontsize=10, color="black")
+    ax.text(-60, label_y, f"Road collision rate: {evaluate_road_collision_rate(data, agents, t):.2%}", fontsize=10, color="black")
 
     return ax
 
 
-def evaluate_road_collisions(data, agents, t, log=False):
+def evaluate_road_collision_rate(data, agents, t, log=False):
     """Road collision rate: {result:.2%}"""
 
     touch_cnt = 0
