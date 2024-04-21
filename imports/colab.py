@@ -1,4 +1,4 @@
-from setup import sys
+from imports import sys
 
 
 in_colab = "google.colab" in sys.modules

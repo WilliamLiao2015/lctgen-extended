@@ -1,4 +1,4 @@
-from setup import in_colab
+from imports import in_colab
 
 
 if in_colab: base_dir = "/content"
