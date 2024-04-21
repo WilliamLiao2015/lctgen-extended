@@ -36,4 +36,4 @@ def inference(model, cfg, map_vecs, map_ids, llm_result):
         for agent in agents[t]:
             agent.length_width = np.clip(agent.length_width, [MIN_LENGTH, MIN_WIDTH], [10.0, 5.0])
 
-    return agents
+    return data, agents
