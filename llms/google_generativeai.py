@@ -1,14 +1,8 @@
 from configs import prompts_dir
-from setup import genai, in_colab
+from imports import genai
 
 
 def get_google_llm(model_name="gemini-1.0-pro-latest", generation_config=None, safety_settings=None):
-    if in_colab:
-        from setup import userdata
-        genai.configure(api_key=userdata.get("GOOGLE_API_KEY"))
-    else:
-        raise Exception("Currently only supported in Google Colab.")
-
     # Set up the model
     generation_config = {
         "temperature": 0.9,
