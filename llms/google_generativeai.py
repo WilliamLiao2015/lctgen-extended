@@ -38,10 +38,10 @@ def get_google_llm(model_name="gemini-1.0-pro-latest", generation_config=None, s
 def inference_google_llm(llm_model, query):
     prompt = "## INSTRUCTIONS\n"
 
-    with open(f"{prompts_dir}/sys_non_api_cot_attr_20m.prompt") as fp:
+    with open(f"{prompts_dir}/sys_non_api_cot_attr_20m.prompt", "r", encoding="utf-8") as fp:
         prompt += fp.read()
     prompt += "\n---\n## QUERIES\n"
-    with open(f"{prompts_dir}/non_api_cot_attr_20m.prompt") as fp:
+    with open(f"{prompts_dir}/non_api_cot_attr_20m.prompt", "r", encoding="utf-8") as fp:
         prompt += fp.read()
 
     prompt = prompt.replace("INSERT_QUERY_HERE", query)

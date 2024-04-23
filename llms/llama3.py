@@ -4,10 +4,10 @@ from imports.packages import requests
 
 
 def inference_llama3_llm(query):
-    with open(f"{prompts_dir}/sys_non_api_cot_attr_20m.prompt") as fp:
+    with open(f"{prompts_dir}/sys_non_api_cot_attr_20m.prompt", "r", encoding="utf-8") as fp:
         system_prompt = fp.read()
 
-    with open(f"{prompts_dir}/non_api_cot_attr_20m.prompt") as fp:
+    with open(f"{prompts_dir}/non_api_cot_attr_20m.prompt", "r", encoding="utf-8") as fp:
         user_prompt = fp.read()
 
     prompt = prompt.replace("INSERT_QUERY_HERE", query)
