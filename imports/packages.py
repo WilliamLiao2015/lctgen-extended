@@ -21,5 +21,6 @@ import PIL.Image as Image
 
 
 # Large Language Models
+import requests
 import google.generativeai as genai
 import openai
