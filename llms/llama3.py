@@ -18,7 +18,7 @@ def inference_llama3_llm(query, stream=False):
         }),
         "temperature":0.75,
         "topP":0.9,
-        "maxTokens": 1024
+        "maxTokens": 4096
     }, stream=stream)
 
     llm_result = ""
