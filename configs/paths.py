@@ -2,7 +2,7 @@ from scripts.colab import in_colab
 
 
 if in_colab: base_dir = "/content"
-else: base_dir = "."
+else: base_dir = ".."
 
 
 lctgen_extended_dir = f"{base_dir}/lctgen-extended"
