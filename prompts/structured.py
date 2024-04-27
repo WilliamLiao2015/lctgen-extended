@@ -8,13 +8,13 @@ roads = [
     "a roundabout"
 ]
 
-actions = ["stop", "turn left", "change to left lane", "decelerate", "keep_speed", "accelerate", "change to right lane", "turn right"]
+actions = ["stop", "turn left", "change to left lane", "decelerate", "keep speed", "accelerate", "change to right lane", "turn right"]
 
 prompts = [
     {
         "type": "rear-end collision",
         "functional": "V1 goes straight and collides with V2 while V2 turns left",
-        "template": "{n1} collides with {n2}, {others}at {road}",
+        "template": "{n1} collides with {n2}, {others}, at {road}",
         "abstract": {
             "roads": [0, 1, 2],
             "norms": [
@@ -49,12 +49,13 @@ def generate_prompt(prompt):
         agent = id + 1
         if i < len(norms):
             norm = norms[i]
-            norm_strs[norm["name"]] = f"V{agent} {actions[random.choice(norm['actions'])]}"
-        else: others_str += f"V{agent} {actions[random.choice(range(8))]}, "
+            norm_strs[norm["name"]] = f"V{agent}"
+            others_str += f"V{agent} {actions[random.choice(norm['actions'])]} and "
+        else: others_str += f"V{agent} {actions[random.choice(range(8))]} and "
 
     prompt_str = prompt_str.format_map({
         **norm_strs,
-        "others": others_str,
+        "others": others_str.strip("and "),
         "road": roads[road]
     })
 
@@ -62,4 +63,4 @@ def generate_prompt(prompt):
 
 
 if __name__ == "__main__":
-    print(generate_prompt(0))
+    print(generate_prompt(random.choice(prompts)))
