@@ -38,8 +38,8 @@ def generate_prompt(prompt):
     road = random.choice(abstract["roads"])
     norms = abstract["norms"]
 
-    agents = list(range(random.choice(abstract["agents"])))
-    random.shuffle(agents)
+    agents = [0] + list(range(1, random.choice(abstract["agents"])))
+    random.shuffle(agents[1:])
 
     prompt_str = prompt["template"]
     norm_strs = {}
