@@ -10,7 +10,7 @@ roads = [
 
 actions = ["stop", "turn left", "change to left lane", "decelerate", "keep speed", "accelerate", "change to right lane", "turn right"]
 
-prompts = [
+scenarios = [
     {
         "type": "rear-end collision",
         "functional": "V1 goes straight and collides with V2 while V2 turns left",
@@ -33,15 +33,15 @@ prompts = [
 ]
 
 
-def generate_prompt(prompt):
-    abstract = prompt["abstract"]
+def generate_prompt(scenario):
+    abstract = scenario["abstract"]
     road = random.choice(abstract["roads"])
     norms = abstract["norms"]
 
     agents = [0] + list(range(1, random.choice(abstract["agents"])))
     random.shuffle(agents[1:])
 
-    prompt_str = prompt["template"]
+    prompt_str = scenario["template"]
     norm_strs = {}
     others_str = ""
 
@@ -63,4 +63,4 @@ def generate_prompt(prompt):
 
 
 if __name__ == "__main__":
-    print(generate_prompt(random.choice(prompts)))
+    print(generate_prompt(random.choice(scenarios)))
