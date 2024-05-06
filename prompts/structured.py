@@ -28,7 +28,7 @@ scenarios = [
                     "actions": [1]
                 }
             ],
-            "agents": range(2, 5)
+            "agents": list(range(2, 5))
         }
     },
     {
@@ -43,7 +43,7 @@ scenarios = [
                     "actions": [1]
                 }
             ],
-            "agents": range(1, 5)
+            "agents": list(range(1, 5))
         }
     }, # for simplicity, right turn is temporarily ignored
     {
@@ -58,7 +58,7 @@ scenarios = [
                     "actions": [2]
                 }
             ],
-            "agents": range(1, 5)
+            "agents": list(range(1, 5))
         }
     }, # for simplicity, changing to right lane is temprarily ignored
     {
@@ -77,7 +77,7 @@ scenarios = [
                     "actions": [0, 1, 3, 4, 5]
                 }
             ],
-            "agents": range(2, 5)
+            "agents": list(range(2, 5))
         }
     },
     {
@@ -96,7 +96,7 @@ scenarios = [
                     "actions": [3, 4, 5]
                 }
             ],
-            "agents": range(2, 5)
+            "agents": list(range(2, 5))
         }
     },
     {
@@ -115,7 +115,7 @@ scenarios = [
                     "actions": [3, 4, 5]
                 }
             ],
-            "agents": range(2, 5)
+            "agents": list(range(2, 5))
         }
     },
     { # assumption: left-hand driving countries (TW, US, etc.)
@@ -134,7 +134,7 @@ scenarios = [
                     "actions": [3, 4, 5]
                 }
             ],
-            "agents": range(2, 5)
+            "agents": list(range(2, 5))
         }
     }
 
