@@ -19,3 +19,4 @@ def setup_colab():
     openai.api_key = userdata.get("OPENAI_API_KEY")
 
     os.environ["MONGODB_PASSWORD"] = userdata.get("MONGODB_PASSWORD")
+    os.environ["TOGETHER_API_KEY"] = userdata.get("TOGETHER_API_KEY")
