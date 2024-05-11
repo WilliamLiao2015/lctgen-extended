@@ -1,4 +1,4 @@
-from imports.system import sys
+from imports.system import os, sys
 from imports.packages import genai, openai
 
 
@@ -17,3 +17,5 @@ def setup_colab():
     # Set up the OpenAI authentification
     openai.organization = userdata.get("OPENAI_ORGANIZATION")
     openai.api_key = userdata.get("OPENAI_API_KEY")
+
+    os.environ["MONGODB_PASSWORD"] = userdata.get("MONGODB_PASSWORD")
