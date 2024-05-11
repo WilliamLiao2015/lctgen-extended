@@ -4,3 +4,5 @@ __pycache__
 checkpoints
 
 .DS_Store
+
+.env
