@@ -1,12 +1,20 @@
 import random
 
 
+# "a T-intersection", "a roundabout"
 roads = [
-    "a two-way intersection",
-    "a four-way intersection",
-    "a T-intersection",
-    "a roundabout",
-    "freeway"
+    {
+        "name": "a two-way intersection",
+        "actions": [0, 1, 2, 3, 4, 5, 6, 7]
+    },
+    {
+        "name": "a four-way intersection",
+        "actions": [0, 1, 2, 3, 4, 5, 6, 7]
+    },
+    {
+        "name": "a freeway",
+        "actions": [0, 2, 3, 4, 5, 6]
+    }
 ]
 
 actions = ["stop", "turn left", "change to left lane", "decelerate", "keep speed", "accelerate", "change to right lane", "turn right"]
@@ -17,7 +25,7 @@ scenarios = [
         "functional": "V1 goes straight and collides with V2 while V2 turns left",
         "template": "{n1} collides with {n2}, {others}, at {road}",
         "abstract": {
-            "roads": [0, 1, 2],
+            "roads": [0, 1],
             "norms": [
                 {
                     "name": "n1",
@@ -36,7 +44,7 @@ scenarios = [
         "functional": "V1 turns right and bumps into V2.",
         "template": "{n1} bumps into {n2}, {others}, at {road}",
         "abstract": {
-            "roads": [0, 1, 2],
+            "roads": [0, 1],
             "norms": [
                 {
                     "name": "n1",
@@ -55,7 +63,7 @@ scenarios = [
         "functional": "V1 is travelling straight to the south in the intersection when V2 collides it straight from the east.",
         "template": "{n1} bumps into {n2}, {others}, at {road}",
         "abstract": {
-            "roads": [0, 1, 2],
+            "roads": [0, 1],
             "norms": [
                 {
                     "name": "n1",
@@ -74,7 +82,7 @@ scenarios = [
         "functional": "V1 collides with V2 while V1 changes to left lane",
         "template": "{n1} collides with {n2}, {others}, at {road}",
         "abstract": {
-            "roads": [0, 1, 2, 4],
+            "roads": [0, 1, 2],
             "norms": [
                 {
                     "name": "n1",
@@ -93,11 +101,11 @@ scenarios = [
         "functional": "V1 drives to the opposite lane and crashes V2 while V2 goes straight",
         "template": "{n1} drives to the opposite lane and crashes {n2}, {others}, on {road}",
         "abstract": {
-            "roads": [0, 1, 2, 4],
+            "roads": [0, 1, 2],
             "norms": [
                 {
                     "name": "n1",
-                    "actions": [1, 2]
+                    "actions": [2]
                 },
                 {
                     "name": "n2",
@@ -129,12 +137,12 @@ def generate_prompt(scenario):
             norm = norms[i]
             norm_strs[norm["name"]] = f"V{agent}"
             others_str += f"V{agent} {actions[random.choice(norm['actions'])]} and "
-        else: others_str += f"V{agent} {actions[random.choice(range(8))]} and "
+        else: others_str += f"V{agent} {actions[random.choice(roads[road]['actions'])]} and "
 
     prompt_str = prompt_str.format_map({
         **norm_strs,
         "others": "and ".join(others_str.split("and ")[:-1]).strip(),
-        "road": roads[road]
+        "road": roads[road]["name"]
     })
 
     return prompt_str
