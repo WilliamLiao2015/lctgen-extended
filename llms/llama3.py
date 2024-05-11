@@ -1,5 +1,5 @@
 from configs.paths import prompts_dir
-from imports.system import json
+from imports.system import os
 from imports.packages import requests
 
 
@@ -11,23 +11,21 @@ def inference_llama3_llm(query, stream=False):
         user_prompt = fp.read()
 
     user_prompt = user_prompt.replace("INSERT_QUERY_HERE", query)
-    response = requests.post("https://fumes-api.onrender.com/llama3", json={
-        "prompt": json.dumps({
-            "systemPrompt": system_prompt, 
-            "user": user_prompt
-        }),
+    response = requests.post("https://api.together.xyz/v1/chat/completions", headers={
+        "Authorization": f"Bearer {os.getenv('TOGETHER_API_KEY')}",
+        "Content-Type": "application/json"
+    }, json={
+        "model": "meta-llama/Llama-3-70b-chat-hf",
+        "messages": [
+            { "role": "system", "content": system_prompt },
+            { "role": "user", "content": user_prompt }
+        ],
         "temperature":0.75,
-        "topP":0.9,
-        "maxTokens": 4096
-    }, stream=stream)
+        "top_p":0.9,
+        "max_tokens": 4096,
+        "stream_tokens": stream
+    })
 
-    llm_result = ""
-
-    if stream:
-        for chunk in response.iter_content(chunk_size=1024):  
-            if chunk:
-                llm_result += chunk.decode("utf-8")
-    else:
-        llm_result = response.text
+    llm_result = response.json()["choices"][0]["message"]["content"]
 
     return llm_result
