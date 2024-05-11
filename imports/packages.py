@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from IPython.display import HTML, Javascript
 from matplotlib.patches import Wedge
 from shapely.geometry import Point, Polygon, LineString
+from tqdm.auto import tqdm
 
 
 # NumPy
