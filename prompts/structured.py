@@ -32,36 +32,6 @@ scenarios = [
         }
     },
     {
-        "type": "turn left",
-        "functional": "V1 turns left at an intersection.",
-        "template": "{n1}, {others}, at {road}",
-        "abstract": {
-            "roads": [0, 1, 2],
-            "norms": [
-                {
-                    "name": "n1",
-                    "actions": [1]
-                }
-            ],
-            "agents": list(range(1, 5))
-        }
-    }, # for simplicity, right turn is temporarily ignored
-    {
-        "type": "change to left lane",
-        "functional": "V1 changes to left lane.",
-        "template": "{n1}, {others}, at {road}",
-        "abstract": {
-            "roads": [0, 1, 2, 4],
-            "norms": [
-                {
-                    "name": "n1",
-                    "actions": [2]
-                }
-            ],
-            "agents": list(range(1, 5))
-        }
-    }, # for simplicity, changing to right lane is temprarily ignored
-    {
         "type": "turning collision",
         "functional": "V1 turns right and bumps into V2.",
         "template": "{n1} bumps into {n2}, {others}, at {road}",
@@ -163,7 +133,7 @@ def generate_prompt(scenario):
 
     prompt_str = prompt_str.format_map({
         **norm_strs,
-        "others": others_str.strip("and "),
+        "others": "and ".join(others_str.split("and ")[:-1]).strip(),
         "road": roads[road]
     })
 
