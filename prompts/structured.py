@@ -114,8 +114,159 @@ scenarios = [
             ],
             "agents": list(range(2, 5))
         }
+    },
+    {
+        "type": "rear-end collision",
+        "functional": "V1 decelerates on the freeway and V2 rear-ends it.",
+        "template": "{n1} is rear-ended by {n2}, {others}, at {road}",
+        "abstract": {
+            "roads": [2],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [3]
+                },
+                {
+                    "name": "n2",
+                    "actions": [4, 5]
+                }
+            ],
+            "agents": [0, 1, 2]
+        }
+    },
+    {
+        "type": "turning collision",
+        "functional": "V1 is turning right at a two-way intersection when V2, coming from the opposite direction, turns left and collides with V1.",
+        "template": "{n1} collides with {n2}, {others}, at {road}",
+        "abstract": {
+            "roads": [0, 1],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [7]
+                },
+                {
+                    "name": "n2",
+                    "actions": [1]
+                }
+            ],
+            "agents": list(range(2, 5))
+        }
+    },
+    {
+        "type": "head-on collision",
+        "functional": "V1 is traveling north in its lane when V2 traveling south crosses into V1's lane and collides head-on.",
+        "template": "{n1} collides head-on with {n2}, {others}, at {road}",
+        "abstract": {
+            "roads": [0, 1],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [4]
+                },
+                {
+                    "name": "n2",
+                    "actions": [1, 2]
+                }
+            ],
+            "agents": list(range(2, 5))
+        }
+    },
+    {
+        "type": "rear-end collision",
+        "functional": "V1 is decelerating to stop at a red light when V2 fails to stop in time and crashes into V1 from behind.",
+        "template": "{n1} is hit by {n2} from behind, {others}, at {road}",
+        "abstract": {
+            "roads": [0, 1],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [0, 3]
+                },
+                {
+                    "name": "n2",
+                    "actions": [3, 4, 5]
+                }
+            ],
+            "agents": list(range(2, 5))
+        }
+    },
+    {
+        "type": "merging collision",
+        "functional": "V1 merges onto a freeway and collides with V2 already traveling on the freeway.",
+        "template": "{n1} merges onto the freeway and collides with {n2}, {others}, at {road}",
+        "abstract": {
+            "roads": [2],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [2, 5]
+                },
+                {
+                    "name": "n2",
+                    "actions": [4, 5]
+                }
+            ],
+            "agents": [0, 1, 2, 3, 4]
+        }
+    },
+    {
+        "type": "U-turn collision",
+        "functional": "V1 makes a U-turn at an intersection and collides with V2 coming straight from the opposite direction.",
+        "template": "{n1} makes a U-turn and collides with {n2}, {others}, at {road}",
+        "abstract": {
+            "roads": [0, 1],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [1]
+                },
+                {
+                    "name": "n2",
+                    "actions": [4, 5]
+                }
+            ],
+            "agents": [0, 1, 2, 3, 4]
+        }
+    },
+    {
+        "type": "T-bone collision",
+        "functional": "V1 is traveling straight through a four-way intersection when V2 turns right from a side road and collides with V1.",
+        "template": "{n1} is collided by {n2} on the side, causing a collision, {others}, at {road}",
+        "abstract": {
+            "roads": [1],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [4, 5]
+                },
+                {
+                    "name": "n2",
+                    "actions": [7]
+                }
+            ],
+            "agents": [0, 1, 2, 3]
+        }
+    },
+    {
+        "type": "side-rear collision",
+        "functional": "V1 is changing to the right lane and V2 collides into the rear-right side of V1.",
+        "template": "{n1} gets hit on the rear-right side by {n2}, {others}, at {road}",
+        "abstract": {
+            "roads": [0, 1, 2],
+            "norms": [
+                {
+                    "name": "n1",
+                    "actions": [6]
+                },
+                {
+                    "name": "n2",
+                    "actions": [3, 4, 5]
+                }
+            ],
+            "agents": list(range(2, 5))
+        }
     }
-
 ]
 
 
