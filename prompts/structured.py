@@ -131,7 +131,7 @@ scenarios = [
                     "actions": [4, 5]
                 }
             ],
-            "agents": [0, 1, 2]
+            "agents": list(range(2, 5))
         }
     },
     {
@@ -207,7 +207,7 @@ scenarios = [
                     "actions": [4, 5]
                 }
             ],
-            "agents": [0, 1, 2, 3, 4]
+            "agents": list(range(2, 5))
         }
     },
     {
@@ -226,7 +226,7 @@ scenarios = [
                     "actions": [4, 5]
                 }
             ],
-            "agents": [0, 1, 2, 3, 4]
+            "agents": list(range(2, 5))
         }
     },
     {
@@ -245,7 +245,7 @@ scenarios = [
                     "actions": [7]
                 }
             ],
-            "agents": [0, 1, 2, 3]
+            "agents": list(range(2, 5))
         }
     },
     {
