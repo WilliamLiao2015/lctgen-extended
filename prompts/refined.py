@@ -17,7 +17,8 @@ Evaluating method: evaluate_minimum_speed_rate
 Minimum speed rate: {msr:.2f}%
 '''
 
-refined_prompt_template = '''Query:
+
+refined_prompt_template = '''
 You are a highly skilled assistant specializing in refining and improving structured representations. Given the following initial structured data and additional information, your task is to refine the structured output, ensuring accuracy, completeness, and clarity. Follow these steps:
 
 1. Review the Initial Structured Data: Examine the provided structured data to understand its current format and content.
@@ -28,30 +29,40 @@ You are a highly skilled assistant specializing in refining and improving struct
 
 ## Additional Information
 
-- Actor Vector: A list of vectors describing the attributes of each of the vehicles in the scenario, you only output the values without any text. You focus on modifying the first 3 dimensions of V2's actor vector:
+- You should only modify existing attributes in the Actor Vector, especially the first four attributes in the Actor Vector (pos, distance, direction, speed).
+- The number of the agents should remain the same as the initial structured data.
 
-    ```
-    Meaning of the Actor vector attribute:
-    - dim 0: 'pos': [-1,3] - whether the vehicle is in the four quadrant of ego vechile in the order of [0 - 'front left', 1 - 'back left', 2- 'back right', 3 - 'front right']. -1 if the vehicle is the ego vehicle.
-    - dim 1: 'distance': [0,3] - the distance range index of the vehicle towards the ego vehicle; range is from 0 to 72 meters with 20 meters interval. 0 if the vehicle is the ego vehicle. For example, if distance value is 15 meters, then the distance range index is 0.
-    - dim 2: 'direction': [0,3] - the direction of the vehicle relative to the ego vehicle, in the order of [0- 'parallel_same', 1-'parallel_opposite', 2-'perpendicular_up', 3-'perpendicular_down']. 0 if the vehicle is the ego vehicle.
-    - dim 3: 'speed': [0,8] - the speed range index of the vehicle; range is from 0 to 20 m/s with 2.5 m/s interval. For example, 20m/s is in range 8, therefore the speed value is 8.
-    - dim 4-7: 'action': [0,7] - 4-dim, generate actions into the future 4 second with each two actions have a time interval of 1s (4 actions in total), the action ids are [0 - 'stop', 1 - 'turn left', 2 - 'left lane change', 3- 'decelerate', 4- 'keep_speed', 5-'accelerate',  6-'right lane change', 7-'turn right'].
-    ```
+### Query
 
-- Metrics:
-    ```
-    - Critical Area Rate:
-        The critical area rate (CAR) is inspired by the conflict area mentioned in the literature above, indicating the likelihood of a collision occurring in a traffic scenario after a specific point in time.
-        Due to the significant inertia of vehicles, sharp turns are difficult. Therefore, we define the critical area of a vehicle at a specific point in time as a sector with a radius equal to the speed, extending 30 degrees to either side of the current direction of travel.
-        In summary, $CAR$ is calculated by dividing the total overlapped critical area by the total area of all overlapping critical areas. Since our goal is to generate critical scenario, a low CAR is undesirable.
-    - Road Collision Rate:
-        The road collision rate (RCR) is determined by calculating the number of vehicles whose bounding boxes collide with the road boundaries, divided by the total number of vehicles. It indicates the degree of irrationality in a traffic scenario at a specific point in time. Under normal circumstances, no vehicle's bounding box should collide with the road boundaries.
-    - Car Collision Rate:
-        The car collision rate (CCR) is calculated by dividing the number of all crashed vehicles by the total number of vehicles. It indicates the level of danger in a traffic scenario at a specific point in time. In a traffic scenario considered safe, the $CCR$ is expected to be $0$, as no two vehicles should collide, but our goal is to generate critical traffic scenario, a CCR of $0$ is not desirable, indicating a bad structured output.
-    - Minimum Speed Rate:
-        The minimum speed rate (MSR) is calculated by dividing the minimum speed among all vehicles by the average speed of all vehicles. It indicates the fluidity of a traffic scenario at a specific point in time and can roughly serve as an indicator of the danger level.
-    ```
+The initial query that describes the actions of the vehicles in the scenario.
+
+### Actor Vector
+
+A list of vectors describing the attributes of each of the vehicles in the scenario, you only output the values without any text:
+
+```
+Meaning of the Actor vector attribute:
+- dim 0: 'pos': [-1,3] - whether the vehicle is in the four quadrant of ego vechile in the order of [0 - 'front left', 1 - 'back left', 2- 'back right', 3 - 'front right']. -1 if the vehicle is the ego vehicle.
+- dim 1: 'distance': [0,3] - the distance range index of the vehicle towards the ego vehicle; range is from 0 to 72 meters with 20 meters interval. 0 if the vehicle is the ego vehicle. For example, if distance value is 15 meters, then the distance range index is 0.
+- dim 2: 'direction': [0,3] - the direction of the vehicle relative to the ego vehicle, in the order of [0- 'parallel_same', 1-'parallel_opposite', 2-'perpendicular_up', 3-'perpendicular_down']. 0 if the vehicle is the ego vehicle.
+- dim 3: 'speed': [0,8] - the speed range index of the vehicle; range is from 0 to 20 m/s with 2.5 m/s interval. For example, 20m/s is in range 8, therefore the speed value is 8.
+- dim 4-7: 'action': [0,7] - 4-dim, generate actions into the future 4 second with each two actions have a time interval of 1s (4 actions in total), the action ids are [0 - 'stop', 1 - 'turn left', 2 - 'left lane change', 3- 'decelerate', 4- 'keep_speed', 5-'accelerate',  6-'right lane change', 7-'turn right'].
+```
+
+### Metrics:
+
+```
+- Critical Area Rate:
+    The critical area rate (CAR) is inspired by the conflict area mentioned in the literature above, indicating the likelihood of a collision occurring in a traffic scenario after a specific point in time.
+    Due to the significant inertia of vehicles, sharp turns are difficult. Therefore, we define the critical area of a vehicle at a specific point in time as a sector with a radius equal to the speed, extending 30 degrees to either side of the current direction of travel.
+    In summary, $CAR$ is calculated by dividing the total overlapped critical area by the total area of all overlapping critical areas. Since our goal is to generate critical scenario, a low CAR is undesirable.
+- Road Collision Rate:
+    The road collision rate (RCR) is determined by calculating the number of vehicles whose bounding boxes collide with the road boundaries, divided by the total number of vehicles. It indicates the degree of irrationality in a traffic scenario at a specific point in time. Under normal circumstances, no vehicle's bounding box should collide with the road boundaries.
+- Car Collision Rate:
+    The car collision rate (CCR) is calculated by dividing the number of all crashed vehicles by the total number of vehicles. It indicates the level of danger in a traffic scenario at a specific point in time. In a traffic scenario considered safe, the $CCR$ is expected to be $0$, as no two vehicles should collide, but our goal is to generate critical traffic scenario, a CCR of $0$ is not desirable, indicating a bad structured output.
+- Minimum Speed Rate:
+    The minimum speed rate (MSR) is calculated by dividing the minimum speed among all vehicles by the average speed of all vehicles. It indicates the fluidity of a traffic scenario at a specific point in time and can roughly serve as an indicator of the danger level.
+```
 
 ## Explanation
 
@@ -71,6 +82,10 @@ Refined Structured Data: This is where the assistant outputs the improved versio
 ### Initial Structured Data
 
 ```
+Query: V1 turn left, V2 goes straight and accelerate, V3 slow down, at a two way intersection
+
+---
+
 Actor Vector:
 - 'V1': [-1, 0, 0, 2, 1, 1, 1, 1]
 - 'V2': [0, 0, 0, 4, 5, 5, 5, 5]
@@ -109,6 +124,10 @@ Map Vector:
 ### Initial Structured Data
 
 ```
+Query: {query}
+
+---
+
 {llm_result}
 
 ---
@@ -123,7 +142,7 @@ Map Vector:
 '''
 
 
-def generate_refined_prompt(state_str: str, llm_result: str):
+def generate_refined_prompt(query: str, llm_result: str, state_str: str):
     state_str_js = json.loads(state_str)
     metrics_eval = []
 
@@ -132,6 +151,8 @@ def generate_refined_prompt(state_str: str, llm_result: str):
 
     oar, rcr, ccr, msr = metrics_eval
 
-    refined_prompt = refined_prompt_template.format(llm_result=llm_result, metric_str=metric_str_template.format(oar=oar, rcr=rcr, ccr=ccr, msr=msr))
+    refined_prompt = refined_prompt_template.format(query=query, llm_result=llm_result, metric_str=metric_str_template.format(oar=oar, rcr=rcr, ccr=ccr, msr=msr))
+
+    print(refined_prompt)
 
     return refined_prompt
