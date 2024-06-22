@@ -29,7 +29,8 @@ You are a highly skilled assistant specializing in refining and improving struct
 
 ## Additional Information
 
-- You should only modify existing attributes in the Actor Vector, especially the first four attributes in the Actor Vector (pos, distance, direction, speed).
+- You should only modify existing attributes in the Actor Vector
+- You should especially focus on the first four attributes in the Actor Vector (pos, distance, direction, speed).
 - The number of the agents should remain the same as the initial structured data.
 
 ### Query
@@ -152,7 +153,5 @@ def generate_refined_prompt(query: str, llm_result: str, state_str: str):
     oar, rcr, ccr, msr = metrics_eval
 
     refined_prompt = refined_prompt_template.format(query=query, llm_result=llm_result, metric_str=metric_str_template.format(oar=oar, rcr=rcr, ccr=ccr, msr=msr))
-
-    print(refined_prompt)
 
     return refined_prompt
