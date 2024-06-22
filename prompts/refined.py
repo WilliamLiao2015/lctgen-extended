@@ -3,7 +3,7 @@ import json
 import numpy as np
 
 
-def refine_prompt(state_str: str, llm_result: str):
+def generate_refined_prompt(state_str: str, llm_result: str):
     state_str_js = json.loads(state_str)
     metrics_eval = []
 
@@ -118,9 +118,7 @@ def refine_prompt(state_str: str, llm_result: str):
     ### Initial Structured Data
 
     ```
-
     {llm_result}
-
 
     ---
 
@@ -131,7 +129,6 @@ def refine_prompt(state_str: str, llm_result: str):
 
     ```
     ```
-
     '''
 
     return refined_prompt
