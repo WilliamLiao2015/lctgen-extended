@@ -6,3 +6,16 @@ checkpoints
 .DS_Store
 
 .env
+
+# LCTGen
+
+**__pycache__**
+**.pyc**
+**.pkl**
+**prepare
+**.ckpt
+**.key
+**.org
+**.vscode
+**.zip**
+**npy**
