@@ -23,10 +23,15 @@ from .datasets.utils import fc_collate_fn
 from lctgen.core.registry import registry
 
 class BaseTrainer():
-    def __init__(self, config, optional_callbacks = []):
+    # Extended: Add `extended` argument
+    # def __init__(self, config, optional_callbacks = []):
+    def __init__(self, config, optional_callbacks = [], extended = False):
         self.config = config
         self.profier = 'simple'
         avalible_gpus = [i for i in range(torch.cuda.device_count())]
+
+        # Extended: Add `extended` mode identifier
+        self.extended = extended
 
         # use all avalible GPUs
         if self.config.GPU is None or len(self.config.GPU) > torch.cuda.device_count():
@@ -67,7 +72,9 @@ class BaseTrainer():
             self.lightning_model = model_cls.load_from_checkpoint(self.config.LOAD_CHECKPOINT_PATH, config=self.config, metrics=self.metrics, strict=False)
             print('load full model from checkpoint: ', self.config.LOAD_CHECKPOINT_PATH)
         else:
-            self.lightning_model = model_cls(self.config, self.metrics)
+            # Extended: Add `extended` parameter
+            # self.lightning_model = model_cls(self.config, self.metrics)
+            self.lightning_model = model_cls(self.config, self.metrics, self.extended)
 
     def _config_data(self):
         task_config = self.config

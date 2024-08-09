@@ -44,11 +44,21 @@ def main():
         help="Modify config options from command line",
     )
 
+    # Extended: Add `extended` arguments
+    parser.add_argument(
+        "--extended",
+        type=bool,
+        default=False,
+        help="Use extended version of the code",
+    )
+
     args = parser.parse_args()
     run_exp(**vars(args))
 
 
-def execute_exp(config: Config, run_type: str) -> None:
+# Extended: Add `extended` arguments
+# def execute_exp(config: Config, run_type: str) -> None:
+def execute_exp(config: Config, run_type: str, extended: bool = False) -> None:
     r"""This function runs the specified config with the specified runtype
     Args:
     config: Habitat.config
@@ -58,7 +68,7 @@ def execute_exp(config: Config, run_type: str) -> None:
     np.random.seed(config.SEED)
     torch.manual_seed(config.SEED)
 
-    trainer = Trainer(config)
+    trainer = Trainer(config, extended=extended)
 
     if run_type == "train":
         trainer.train()
@@ -70,7 +80,9 @@ def execute_exp(config: Config, run_type: str) -> None:
 
     return trainer.save_dir
 
-def run_exp(exp_config: str, run_type: str, opts=None) -> None:
+# Extended: Add `extended` arguments
+# def run_exp(exp_config: str, run_type: str, opts=None) -> None:
+def run_exp(exp_config: str, run_type: str, opts=None, extended: bool = False) -> None:
     r"""Runs experiment given mode and config
 
     Args:
@@ -83,7 +95,10 @@ def run_exp(exp_config: str, run_type: str, opts=None) -> None:
     """
 
     config = get_config(exp_config, opts)
-    execute_exp(config, run_type)
+
+    # Extended: Add `extended` parameter
+    # execute_exp(config, run_type)
+    execute_exp(config, run_type, extended)
 
 if __name__ == "__main__":
     main()

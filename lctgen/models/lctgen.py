@@ -14,8 +14,20 @@ from .posprocess import PostProcess
 
 @registry.register_model(name='lctgen')
 class LCTGen(BaseModel):
-  def __init__(self, config, metrics):
+  # Extended: Add `extended` argument
+  # def __init__(self, config, metrics):
+  def __init__(self, config, metrics, extended = False):
     super().__init__(config, metrics)
+
+    # Extended: Add `extended` mode identifier
+    self.extended = extended
+
+    print(f"Extended mode: {self.extended}")
+
+    # Extended: Add extended refiner
+    if self.extended:
+      from extended.refiner.base_refiner import BaseRefiner
+      self.refiner = BaseRefiner(self.config)
 
     self.metrics = metrics
     self._config_models()
@@ -137,6 +149,11 @@ class LCTGen(BaseModel):
   
   def forward(self, batch, mode):
     result = {}
+
+    # Extended: Add extended refiner forward call
+    if self.extended:
+      batch = self.refiner(batch)
+
     result['text_decode_output'] = self.trafficgen_model(batch)
     
     batch = self._format_target_for_detr(batch)
