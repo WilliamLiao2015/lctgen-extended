@@ -24,11 +24,6 @@ class LCTGen(BaseModel):
 
     print(f"Extended mode: {self.extended}")
 
-    # Extended: Add extended refiner
-    if self.extended:
-      from extended.refiner.base_refiner import BaseRefiner
-      self.refiner = BaseRefiner(self.config)
-
     self.metrics = metrics
     self._config_models()
     self._config_parameters()
@@ -49,6 +44,13 @@ class LCTGen(BaseModel):
     self.trafficgen_model = DETRAgentQuery(self.config)
     self.trafficgen_model.train()
     self.models.append(self.trafficgen_model)
+
+    # Extended: Add extended refiner
+    if self.extended:
+      from extended.refiner.base_refiner import BaseRefiner
+      self.refiner = BaseRefiner(self.config)
+      self.refiner.train()
+      self.models.append(self.refiner)
 
   def _format_target_for_detr(self, batch):
     b = batch['agent'].shape[0]
@@ -152,7 +154,7 @@ class LCTGen(BaseModel):
 
     # Extended: Add extended refiner forward call
     if self.extended:
-      batch = self.refiner(batch)
+      batch["text"] = self.refiner(batch)
 
     result['text_decode_output'] = self.trafficgen_model(batch)
     

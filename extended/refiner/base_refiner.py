@@ -52,6 +52,6 @@ class BaseRefiner(DETRAgentQuery):
         # print(f"agent_feat.shape: {agent_feat.shape}")
 
         # Agent Attribute Decoder
-        data["text"] = self.agent_decode(agent_feat)
+        result = self.agent_decode(agent_feat)
 
-        return data
+        return result

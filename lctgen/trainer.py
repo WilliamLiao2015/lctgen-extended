@@ -40,7 +40,7 @@ class BaseTrainer():
         # device config
         device_cfg = {}
         if len(self.config.GPU) > 1:
-            device_cfg['strategy'] = 'ddp_find_unused_parameters_false'
+            device_cfg['strategy'] = 'ddp'
             device_cfg['devices'] = self.config.GPU
             device_cfg['accelerator'] = 'gpu'
         elif len(self.config.GPU) == 1:
