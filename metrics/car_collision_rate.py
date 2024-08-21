@@ -1,5 +1,6 @@
-from imports.system import itertools
-from imports.packages import plt
+import itertools
+
+import matplotlib.pyplot as plt
 
 
 def visualize_car_collision_rate(data, agents, t, label_y = 50):

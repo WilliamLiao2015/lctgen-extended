@@ -1,4 +1,5 @@
-from imports.packages import plt, LineString
+import matplotlib.pyplot as plt
+from shapely.geometry import LineString
 
 
 def visualize_road_collision_rate(data, agents, t = 0, label_y = 50):

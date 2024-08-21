@@ -1,5 +1,10 @@
-from imports.system import math, itertools
-from imports.packages import plt, Polygon, Wedge
+import math
+import itertools
+
+import matplotlib.pyplot as plt
+from matplotlib.patches import Wedge
+from shapely.geometry import Polygon
+
 from utils.geometry import compute_magnitude
 
 
