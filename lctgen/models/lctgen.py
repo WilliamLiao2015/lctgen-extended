@@ -12,6 +12,14 @@ from .matcher import HungarianMatcher
 from .detr_loss import SetCriterion
 from .posprocess import PostProcess
 
+# Extended: Import required modules and extended metrics
+import os
+import sys
+
+sys.path.insert(0, os.getcwd())
+
+from metrics import metrics, wrapper
+
 @registry.register_model(name='lctgen')
 class LCTGen(BaseModel):
   # Extended: Add `extended` argument
@@ -163,5 +171,24 @@ class LCTGen(BaseModel):
 
     if mode in ['val', 'test']:
       result['text_scene_output'] = self.process(result['text_decode_output'], batch, with_attribute=self.with_attribute, pred_ego=self.pred_ego, pred_motion=self.pred_motion)
+
+      # Extended: Add extended metric evaluations
+      if self.extended:
+        # Extended: Add log parameters for extended metrics
+        if mode == 'train':
+          on_step = True
+          on_epoch = False
+        else:
+          on_step = False
+          on_epoch = True
+        sync_dist = True if len(self.config.GPU) > 1 else False
+
+        result["bound"] = batch["bound"] # Extended: Expose `bound` to result for `road-collision-rate` metric
+
+        # Extended: Evaluate extended metrics
+        for name, metric in metrics.items():
+          evaluate = wrapper(metric)
+          metric_value = evaluate(result)
+          self.log(f'{mode}/metric-{name}', np.mean(metric_value), on_epoch=on_epoch, on_step=on_step, sync_dist=sync_dist)
 
     return result
