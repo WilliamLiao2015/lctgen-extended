@@ -47,11 +47,11 @@ class BaseRefiner(DETRAgentQuery):
         # print(f"query_encoding.shape: {query_encoding.shape}")
 
         # Generative Transformer
-        agent_feat = self.decoder(tgt=query_encoding, memory=line_enc, tgt_key_padding_mask=~data['agent_mask'], memory_key_padding_mask=~data['center_mask'])
+        # agent_feat = self.decoder(tgt=query_encoding, memory=line_enc, tgt_key_padding_mask=~data['agent_mask'], memory_key_padding_mask=~data['center_mask'])
 
         # print(f"agent_feat.shape: {agent_feat.shape}")
 
         # Agent Attribute Decoder
-        result = self.agent_decode(agent_feat)
+        result = self.agent_decode(query_encoding)
 
         return result
