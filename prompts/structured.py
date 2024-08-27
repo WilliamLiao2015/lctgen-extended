@@ -298,6 +298,9 @@ def generate_prompt(scenario):
 
     return prompt_str
 
+def generate_random_prompt(num_prompts=1):
+    return [generate_prompt(random.choice(scenarios)) for _ in range(num_prompts)]
+
 
 if __name__ == "__main__":
     print(generate_prompt(random.choice(scenarios)))
