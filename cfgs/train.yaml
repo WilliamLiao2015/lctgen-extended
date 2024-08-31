@@ -66,7 +66,7 @@ LOSS:
       bbox: 1.0
       motion: 0.1
 
-MAX_EPOCHES: 100
+MAX_EPOCHES: 5
 METRIC:
   TYPE:
   - MMD
@@ -125,6 +125,6 @@ TRAIN:
 VAL:
   BATCH_SIZE: 16
   NUM_WORKERS: 4
-VAL_INTERVAL: 10
-VIS_INTERVAL: 20
+VAL_INTERVAL: 1
+VIS_INTERVAL: 1
 WANDB_PROJ: lctgen_attr_ind_motion

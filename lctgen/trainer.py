@@ -166,14 +166,16 @@ class BaseTrainer():
                             callbacks=callbacks,
                             profiler=self.profier,
                             enable_checkpointing=enable_checkpointing,
-                            **self.device_cfg)
+                            **self.device_cfg,
+                            gpus=1)
 
     def _config_test_trainer(self):
         test_trainer = Trainer(log_every_n_steps=self.config.LOG_INTERVAL_STEPS,
                     default_root_dir=self.save_dir,
                     logger=self.logger,
                     profiler=self.profier,
-                    **self.device_cfg)
+                    **self.device_cfg,
+                    gpus=1)
         
         return test_trainer
 

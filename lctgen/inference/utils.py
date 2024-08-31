@@ -103,8 +103,8 @@ def output_formating_cot(result):
       else:
         agent_vectors.append(data_vec)
 
-  print('Agent vectors:', agent_vectors)
-  print('Map vector:', map_vector)
+  # print('Agent vectors:', agent_vectors)
+  # print('Map vector:', map_vector)
   
   return agent_vectors, map_vector
 

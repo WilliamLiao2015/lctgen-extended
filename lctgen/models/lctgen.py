@@ -36,7 +36,7 @@ class LCTGen(BaseModel):
     self._config_models()
     self._config_parameters()
     cls_num = config.MODEL.SCENE.INIT_CFG.DECODER.LANE_NUM
-    
+
     loss_cfg = config.LOSS.DETR
     matcher = HungarianMatcher(cost_class=loss_cfg.MATCH_COST.CLASS)
     self.criterion = SetCriterion(num_classes=cls_num, matcher=matcher, weight_dict=loss_cfg.WEIGHT, eos_coef=loss_cfg.EOS_COEF, losses=loss_cfg.LOSSES, use_center_mask=loss_cfg.USE_CENTER_MASK, cfg=config)
@@ -46,7 +46,7 @@ class LCTGen(BaseModel):
     self.pred_motion = self.config.MODEL.MOTION.ENABLE
 
     self.process = PostProcess(config)
-  
+
   def _config_models(self):
     self.models = []
     self.trafficgen_model = DETRAgentQuery(self.config)
@@ -91,7 +91,7 @@ class LCTGen(BaseModel):
         motion_mask = torch.swapaxes(motion_mask, 0, 1).unsqueeze(-1).repeat(1, 1, 2)
 
         target['motion_mask'] = motion_mask
-        
+
         motion = batch['traj'][i][1:, start_idx:]
         target['motion'] = torch.swapaxes(motion, 0, 1).float()
 
@@ -112,9 +112,18 @@ class LCTGen(BaseModel):
 
     batch['targets'] = targets
     return batch
-  
+
   def _compute_loss(self, model_output):
     loss = self.criterion(model_output, model_output['data'])
+
+    # Extended: Evaluate extended metrics
+    if self.extended:
+      for _, (metric, calculate) in metrics.items():
+        evaluate = wrapper(metric)
+        before = evaluate(model_output, original=True)
+        after = evaluate(model_output)
+        loss["full_loss"] += calculate(np.mean(before), np.mean(after))
+
     return loss
 
   def _visualize(self, batch, output, mode, z_mode, batch_idx):    
@@ -122,14 +131,14 @@ class LCTGen(BaseModel):
 
     if len(ae_output[0]['agent']) == 0:
       return
-    
+
     if not self.pred_motion:
       input_vis = visualize_input(batch)
       decode_vis = visualize_input(batch, agents=ae_output[0]['agent'])
     else:
       input_vis = visualize_input_seq(batch)
       decode_vis = visualize_input_seq(batch, agents=ae_output[0]['agent'], traj=ae_output[0]['traj'])
-    
+
     # img = np.concatenate([input_vis, decode_vis], axis=1)
     output_name = 'ae' if z_mode == 'input' else z_mode
 
@@ -156,39 +165,46 @@ class LCTGen(BaseModel):
       self._visualize(batch, result['model_output'], mode, 'text', batch_idx)
 
     return result
-  
+
   def forward(self, batch, mode):
     result = {}
 
-    # Extended: Add extended refiner forward call
-    if self.extended:
-      batch["text"] = self.refiner(batch)
+    # # Extended: Add extended refiner forward call
+    # if self.extended:
+    #   # Extended: Keep original result for extended metrics
+    #   result['original_text_decode_output'] = self.trafficgen_model(batch)
+    #   result['original_data'] = self._format_target_for_detr(batch)
+
+    #   # Extended: Refine text output
+    #   batch["text"] = self.refiner(batch)
 
     result['text_decode_output'] = self.trafficgen_model(batch)
-    
+
     batch = self._format_target_for_detr(batch)
     result['data'] = batch
+    result['text_scene_output'] = self.process(result['text_decode_output'], batch, with_attribute=self.with_attribute, pred_ego=self.pred_ego, pred_motion=self.pred_motion)
 
-    if mode in ['val', 'test']:
-      result['text_scene_output'] = self.process(result['text_decode_output'], batch, with_attribute=self.with_attribute, pred_ego=self.pred_ego, pred_motion=self.pred_motion)
+    # # Extended: Add extended metric evaluations
+    # if self.extended:
+    #   result['original_text_scene_output'] = self.process(result['original_text_decode_output'], result['original_data'], with_attribute=self.with_attribute, pred_ego=self.pred_ego, pred_motion=self.pred_motion)
 
-      # Extended: Add extended metric evaluations
-      if self.extended:
-        # Extended: Add log parameters for extended metrics
-        if mode == 'train':
-          on_step = True
-          on_epoch = False
-        else:
-          on_step = False
-          on_epoch = True
-        sync_dist = True if len(self.config.GPU) > 1 else False
+    #   # Extended: Add extended metric evaluations
+    #   if self.extended:
+    #     # Extended: Add log parameters for extended metrics
+    #     if mode == 'train':
+    #       on_step = True
+    #       on_epoch = False
+    #     else:
+    #       on_step = False
+    #       on_epoch = True
+    #     sync_dist = True if len(self.config.GPU) > 1 else False
 
-        result["bound"] = batch["bound"] # Extended: Expose `bound` to result for `road-collision-rate` metric
+    #     result["bound"] = batch["bound"] # Extended: Expose `bound` to result for `road-collision-rate` metric as `result` did not contain `bound` before
 
-        # Extended: Evaluate extended metrics
-        for name, metric in metrics.items():
-          evaluate = wrapper(metric)
-          metric_value = evaluate(result)
-          self.log(f'{mode}/metric-{name}', np.mean(metric_value), on_epoch=on_epoch, on_step=on_step, sync_dist=sync_dist)
+    #     # Extended: Evaluate extended metrics
+    #     for name, (metric, _) in metrics.items():
+    #       evaluate = wrapper(metric)
+    #       metric_value = evaluate(result)
+    #       self.log(f'{mode}/metric-{name}', np.mean(metric_value), on_epoch=on_epoch, on_step=on_step, sync_dist=sync_dist)
 
     return result
